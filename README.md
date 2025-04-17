@@ -1,4 +1,4 @@
-# Rwanda Student Portal 🌍
+# Fandr_edu Student Portal 🌍
 
 A modern student management frontend built using HTML, CSS, and JavaScript.
 Hosted on GitHub Pages: [Visit Live Site](https://koina02.github.io/rwanda-student-portal/)
