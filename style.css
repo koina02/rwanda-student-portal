@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+}
+
+.navbar {
+  background: #1D2955;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1em;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.hero {
+  background: #100C24;
+  color: white;
+  text-align: center;
+  padding: 5em 2em;
+}
+
+.btn {
+  background: #1D2955;
+  padding: 0.5em 1em;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.about-section {
+  padding: 2em;
+  background: white;
+  text-align: center;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 5em auto;
+  background: white;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 100%;
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 0.75em;
+  background: #1D2955;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dashboard {
+  padding: 2em;
+}
+
+:root {
+    --bg-color: #f4f6f8;
+    --text-color: #333;
+    --primary-color: #1D2955;
+    --hero-bg: #100C24;
+  }
+  
+  body {
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+  
+  /* Dark mode styles */
+  body.dark {
+    --bg-color: #0a0a0a;
+    --text-color: #f4f4f4;
+    --primary-color: #FFFFFF;
+    --hero-bg: #1a1a1a;
+  }
+  
+  button#themeToggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+  }
+  
+  .hero h1 {
+    animation: slideDown 1s ease-out;
+  }
+  
+  @keyframes slideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .course {
+    margin: 1em 0;
+  }
+  .progress-bar {
+    background: #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 5px;
+  }
+  .progress {
+    background: #1D2955;
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+  }
+  
