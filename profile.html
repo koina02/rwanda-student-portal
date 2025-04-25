@@ -5,6 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profile | Fandr Edu</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .form-container {
+      max-width: 500px;
+      margin: 10vh auto;
+      background: #ffffff;
+      padding: 3em 2em;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      animation: fadeInUp 0.6s ease;
+      text-align: center;
+    }
+
+    .form-container h2 {
+      margin-bottom: 1.5em;
+      color: #000;
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.75em;
+      margin-bottom: 1.25em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #FFD700;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.75em;
+      background: #FFD700;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #e6c200;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .navbar {
+      background: #1D2955;
+      padding: 1em 2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .logo {
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.3em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1em;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #FFD700;
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -19,8 +113,6 @@
     <form id="profileForm">
       <input type="text" id="fullName" placeholder="Full Name" required />
       <input type="email" id="email" placeholder="Email Address" required />
-      <input type="file" id="profilePic" />
-      <img id="preview" src="" alt="Profile Picture" style="max-width: 100px; margin: 1em 0;" />
       <button type="submit">Save Profile</button>
     </form>
   </div>

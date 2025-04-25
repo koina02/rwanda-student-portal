@@ -5,6 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Courses | Fandr Edu</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fb;
+      color: #1D2955;
+    }
+
+    .navbar {
+      background: #1D2955;
+      color: white;
+      padding: 1em 2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 1.3em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1em;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .dashboard {
+      padding: 3em 2em;
+    }
+
+    .dashboard h2 {
+      text-align: center;
+      margin-bottom: 2em;
+      font-size: 2em;
+      color: #100C24;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2em;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      position: relative;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .course-card h3 {
+      margin-top: 0;
+    }
+
+    .progress-bar {
+      background: #e0e0e0;
+      border-radius: 50px;
+      overflow: hidden;
+      height: 10px;
+      margin: 10px 0;
+    }
+
+    .progress {
+      height: 10px;
+      background: #FFC700;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+
+    .course-card button {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      background: #1D2955;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .course-card button:hover {
+      background: #100C24;
+    }
+
+    .enrolled {
+      border-left: 5px solid #FFC700;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-links {
+        flex-direction: column;
+        gap: 0.5em;
+        margin-top: 0.5em;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -16,18 +125,45 @@
 
   <section class="dashboard">
     <h2>Your Courses</h2>
-    <div class="course">
-      <p>Mathematics</p>
-      <div class="progress-bar"><div class="progress" style="width: 70%"></div></div>
-    </div>
-    <div class="course">
-      <p>History</p>
-      <div class="progress-bar"><div class="progress" style="width: 40%"></div></div>
-    </div>
-    <div class="course">
-      <p>Computer Science</p>
-      <div class="progress-bar"><div class="progress" style="width: 85%"></div></div>
+    <div class="course-grid" id="courseGrid">
+      <!-- Cards will be dynamically injected -->
     </div>
   </section>
+
+  <script>
+    const courses = [
+      { name: "Artificial Intelligence", progress: 75, enrolled: true },
+      { name: "Cybersecurity & Data Privacy", progress: 45, enrolled: false },
+      { name: "Business Leadership & Strategy", progress: 90, enrolled: true },
+      { name: "Sustainable Development Goals", progress: 20, enrolled: false }
+    ];
+
+    const grid = document.getElementById("courseGrid");
+
+    courses.forEach((course, index) => {
+      const card = document.createElement("div");
+      card.classList.add("course-card");
+      if (course.enrolled) card.classList.add("enrolled");
+
+      card.innerHTML = `
+        <h3>${course.name}</h3>
+        <div class="progress-bar"><div class="progress" style="width: ${course.enrolled ? course.progress + "%" : "0%"}"></div></div>
+        <button onclick="toggleEnroll(${index}, this)"> ${course.enrolled ? "Unenroll" : "Enroll"} </button>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    function toggleEnroll(index, btn) {
+      courses[index].enrolled = !courses[index].enrolled;
+      const card = btn.parentElement;
+      const progressBar = card.querySelector('.progress');
+      btn.textContent = courses[index].enrolled ? "Unenroll" : "Enroll";
+      card.classList.toggle("enrolled");
+
+      progressBar.style.width = courses[index].enrolled ? courses[index].progress + "%" : "0%";
+    }
+  </script>
 </body>
 </html>
+

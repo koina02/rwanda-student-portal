@@ -18,8 +18,8 @@ const app = express();
 connectDB()
   .then(() => console.log('✅ MongoDB Connected'))
   .catch((err) => {
-    console.error('❌ MongoDB Connection Error:', err);
-    process.exit(1); 
+    console.error('❌ MongoDB Connection Error:', err.message);
+    process.exit(1);  // Exit the process if DB connection fails
   });
 
 // Middleware setup
@@ -45,11 +45,11 @@ const protect = (req, res, next) => {
     req.user = decoded; // Store user info in the request object
     next();
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Token has expired, please log in again' });
-    }
-    console.error('❌ JWT Error:', error);
-    res.status(401).json({ message: 'Token is not valid' });
+    const errorMessage = error.name === 'TokenExpiredError' 
+      ? 'Token has expired, please log in again'
+      : 'Token is not valid';
+    console.error(`❌ JWT Error: ${error.message}`);
+    res.status(401).json({ message: errorMessage });
   }
 };
 
@@ -72,6 +72,12 @@ app.get('/', (req, res) => {
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err);
   res.status(500).json({ message: 'Internal Server Error', error: err.message });
+});
+
+// Handle unhandled promise rejections (important for production)
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Promise Rejection:', err.message);
+  process.exit(1);  // Exit the process
 });
 
 // Start the server

@@ -1,12 +1,21 @@
+:root {
+  --bg-color: #f4f6f8;
+  --text-color: #000;
+  --primary-color: #000; /* Black */
+  --accent-color: #FFD700; /* Yellow */
+  --hero-bg: #111;
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  color: #333;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
+/* Navbar */
 .navbar {
-  background: #1D2955;
+  background: var(--primary-color);
   padding: 1em;
   display: flex;
   justify-content: space-between;
@@ -22,29 +31,52 @@ body {
 .nav-links a {
   color: white;
   text-decoration: none;
+  font-weight: 500;
 }
 
+.nav-links a:hover {
+  color: var(--accent-color);
+}
+
+/* Hero Section */
 .hero {
-  background: #100C24;
+  background: var(--hero-bg);
   color: white;
   text-align: center;
   padding: 5em 2em;
 }
 
-.btn {
-  background: #1D2955;
-  padding: 0.5em 1em;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
+.hero h1 {
+  animation: slideDown 1s ease-out;
 }
 
+.btn {
+  background: var(--accent-color);
+  padding: 0.5em 1em;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #e6c200;
+}
+
+/* About Section */
 .about-section {
   padding: 2em;
   background: white;
   text-align: center;
+  line-height: 1.6;
 }
 
+.about-section h2 {
+  color: var(--primary-color);
+}
+
+/* Forms (Login/Register) */
 .form-container {
   max-width: 400px;
   margin: 5em auto;
@@ -65,73 +97,124 @@ input {
 button {
   width: 100%;
   padding: 0.75em;
-  background: #1D2955;
+  background: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
+button:hover {
+  background: var(--accent-color);
+  color: black;
+}
+
+/* Dashboard */
 .dashboard {
   padding: 2em;
 }
 
-:root {
-    --bg-color: #f4f6f8;
-    --text-color: #333;
-    --primary-color: #1D2955;
-    --hero-bg: #100C24;
+/* Dark Mode */
+body.dark {
+  --bg-color: #0a0a0a;
+  --text-color: #f4f4f4;
+  --primary-color: #FFFFFF;
+  --accent-color: #FFD700;
+  --hero-bg: #1a1a1a;
+}
+
+/* Theme Toggle Button */
+button#themeToggle {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  body {
-    background: var(--bg-color);
-    color: var(--text-color);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Dark mode styles */
-  body.dark {
-    --bg-color: #0a0a0a;
-    --text-color: #f4f4f4;
-    --primary-color: #FFFFFF;
-    --hero-bg: #1a1a1a;
-  }
-  
-  button#themeToggle {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1.2em;
-    cursor: pointer;
-  }
-  
-  .hero h1 {
-    animation: slideDown 1s ease-out;
-  }
-  
-  @keyframes slideDown {
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .course {
-    margin: 1em 0;
-  }
-  .progress-bar {
-    background: #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    height: 20px;
-    margin-top: 5px;
-  }
-  .progress {
-    background: #1D2955;
-    height: 100%;
-    transition: width 0.5s ease-in-out;
-  }
-  
+}
+
+/* Course Progress */
+.course {
+  margin: 1em 0;
+}
+
+.progress-bar {
+  background: #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.progress {
+  background: var(--accent-color);
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Footer */
+.footer {
+  background: var(--primary-color);
+  color: white;
+  padding: 3em 1em;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2em;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: var(--accent-color);
+  margin-bottom: 1em;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+  color: var(--accent-color);
+}
+
+.social-icons a {
+  font-size: 20px;
+  margin-right: 15px;
+  color: #ccc;
+}
+
+.social-icons a:hover {
+  color: var(--accent-color);
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  margin-top: 30px;
+  font-size: 14px;
+  color: #aaa;
+}
+
