@@ -1,21 +1,30 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
-// Define the MongoDB connection function
+// MongoDB connection function with retry mechanism
 const connectDB = async () => {
   try {
-    // Attempt to connect to MongoDB using the URI from the environment
-    await mongoose.connect(process.env.MONGO_URI);
-
-    console.log('✅ MongoDB Connected');
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ MongoDB Connected Successfully');
   } catch (err) {
-    console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1); // Exit process if MongoDB connection fails
+    console.error('❌ Initial MongoDB connection failed:', err.message);
+    
+    console.log('🔁 Retrying MongoDB connection in 5 seconds...');
+    setTimeout(connectDB, 5000); // Retry connection after 5 seconds
   }
 };
+
+// Handle MongoDB disconnections after initial connect
+mongoose.connection.on('disconnected', () => {
+  console.error('⚡️ MongoDB disconnected. Attempting to reconnect...');
+  connectDB(); // Auto-reconnect if connection drops later
+});
 
 // Export the connectDB function
 module.exports = connectDB;

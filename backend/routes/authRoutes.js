@@ -1,84 +1,95 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import User model
-const authMiddleware = require('../middleware/authMiddleware'); // JWT Auth Middleware
+const User = require('../models/User');
+const authMiddleware = require('../middleware/authMiddleware');
+
+const AppError = require('../utils/AppError');
+const catchAsync = require('../utils/catchAsync');
+
 const router = express.Router();
 
-// User Registration
-router.post('/register', async (req, res) => {
-  const { email, password, role } = req.body;
-  try {
-    // Check if user already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
+// 🔐 Register
+router.post(
+  '/register',
+  catchAsync(async (req, res, next) => {
+    const { email, password, role } = req.body;
 
-    // Hash password
+    const userExists = await User.findOne({ email });
+    if (userExists) return next(new AppError('User already exists', 400));
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = new User({
       email,
       password: hashedPassword,
-      role: role || 'user', // Default role is 'user'
+      role: role || 'user',
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-});
 
-// User Login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
+    res.status(201).json({
+      status: 'success',
+      message: 'User created successfully',
+    });
+  })
+);
+
+// 🔑 Login
+router.post(
+  '/login',
+  catchAsync(async (req, res, next) => {
+    const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
+    if (!user) return next(new AppError('User not found', 400));
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+    if (!isMatch) return next(new AppError('Invalid credentials', 400));
 
-    // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, role: user.role }, 
-      process.env.JWT_SECRET, 
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ token, user: { id: user._id, email: user.email, role: user.role } });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-});
+    res.status(200).json({
+      status: 'success',
+      token,
+      user: { id: user._id, email: user.email, role: user.role },
+    });
+  })
+);
 
-// Get User Profile (Protected Route)
-router.get('/profile', authMiddleware, async (req, res) => {
-  try {
+// 👤 Get User Profile (Protected)
+router.get(
+  '/profile',
+  authMiddleware,
+  catchAsync(async (req, res, next) => {
     const user = await User.findById(req.user.userId).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-});
+    if (!user) return next(new AppError('User not found', 404));
 
-// Admin-Only Route (Example)
-router.get('/admin', authMiddleware, async (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-  res.json({ message: 'Welcome, Admin!' });
-});
+    res.status(200).json({
+      status: 'success',
+      data: { user },
+    });
+  })
+);
+
+// 🛡️ Admin Route
+router.get(
+  '/admin',
+  authMiddleware,
+  catchAsync(async (req, res, next) => {
+    if (req.user.role !== 'admin') {
+      return next(new AppError('Access denied: Admins only', 403));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Welcome, Admin!',
+    });
+  })
+);
 
 module.exports = router;

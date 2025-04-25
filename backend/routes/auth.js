@@ -1,44 +1,35 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const userRoutes = require('./userRoutes');  // Assuming userRoutes.js is your routes file
+const AppError = require('../utils/AppError');
+const globalErrorHandler = require('../utils/globalErrorHandler');
 
-const router = express.Router();
+dotenv.config();
 
-// Register
-router.post('/register', async (req, res) => {
-    const { name, email, password, role } = req.body;
-    
-    try {
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: 'User already exists' });
+const app = express();
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user = new User({ name, email, password: hashedPassword, role });
-        await user.save();
+// Middleware setup
+app.use(cors());
+app.use(bodyParser.json());  // For parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
 
-        res.json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
+// Connect to DB
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Database connected successfully'))
+    .catch((err) => console.log('Database connection error: ', err));
+
+// Routes
+app.use('/api/auth', userRoutes);  // Register routes
+
+// Handle unknown routes
+app.all('*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// Login
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+// Global error handling middleware
+app.use(globalErrorHandler);
 
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-module.exports = router;
+module.exports = app;

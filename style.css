@@ -11,6 +11,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Navbar */
@@ -20,6 +21,7 @@ body {
   display: flex;
   justify-content: space-between;
   color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-links {
@@ -44,15 +46,18 @@ body {
   color: white;
   text-align: center;
   padding: 5em 2em;
+  border-bottom: 2px solid #222;
 }
 
 .hero h1 {
   animation: slideDown 1s ease-out;
+  font-size: 3rem;
+  font-weight: bold;
 }
 
 .btn {
   background: var(--accent-color);
-  padding: 0.5em 1em;
+  padding: 0.75em 1.5em;
   color: black;
   text-decoration: none;
   border-radius: 5px;
@@ -66,14 +71,16 @@ body {
 
 /* About Section */
 .about-section {
-  padding: 2em;
+  padding: 3em 2em;
   background: white;
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .about-section h2 {
   color: var(--primary-color);
+  margin-bottom: 1em;
+  font-size: 2rem;
 }
 
 /* Forms (Login/Register) */
@@ -86,21 +93,21 @@ body {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-input {
+input, button {
   width: 100%;
-  margin: 1em 0;
   padding: 0.75em;
-  border: 1px solid #ccc;
+  margin: 1em 0;
   border-radius: 4px;
 }
 
+input {
+  border: 1px solid #ccc;
+}
+
 button {
-  width: 100%;
-  padding: 0.75em;
   background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
@@ -113,6 +120,7 @@ button:hover {
 /* Dashboard */
 .dashboard {
   padding: 2em;
+  background: var(--bg-color);
 }
 
 /* Dark Mode */

@@ -28,6 +28,12 @@ module.exports = (req, res, next) => {
         next();
     } catch (error) {
         // Handle errors from invalid or expired tokens
-        return res.status(401).json({ message: 'Invalid or expired token.' });
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token has expired. Please log in again.' });
+        }
+
+        // Handle other errors such as invalid token
+        return res.status(401).json({ message: 'Invalid token. Please log in again.' });
     }
 };
+
