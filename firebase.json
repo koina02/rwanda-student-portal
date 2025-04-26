@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "Fandr_edu",
+    "site": "fandredu-7823c",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
